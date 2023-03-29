@@ -1,0 +1,13 @@
+<h2>Supplier List</h2>
+
+<ul class="suppliers">
+    <li *ngFor="let supplier of suppliers">
+        <span class="badge">{{supplier.Id}}</span>
+        <a routerLink="detail/{{supplier.Id}}">
+            <span>{{supplier.SupplierName}}</span>
+        </a>
+        <span type="button" class="delete" title="delete supplier" (click)="delete(supplier)">x</span>
+    </li>
+</ul>
+
+<a routerLink="/supplier/add">Add New Supplier</a>

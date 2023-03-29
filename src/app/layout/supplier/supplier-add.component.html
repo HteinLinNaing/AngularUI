@@ -1,0 +1,21 @@
+<h2>Add New Supplier</h2>
+<form [formGroup]="supplierAdd" (ngSubmit)="submitSupplier()" #formDir="ngForm">
+    <div>
+        <label for="SupplierName">Name:</label>
+        <input class="form-control" placeholder="supplier name" formControlName="SupplierName" />
+        <br />
+
+        <label for="SupplierAddress">Address:</label>
+        <input class="form-control" placeholder="supplier address" formControlName="SupplierAddress" />
+        <br />
+
+        <label for="Supplier Type">Supplier Type</label>
+        <select class="form-control" formControlName="SupplierTypeId">
+            <option *ngFor="let custt of suppliertypes" value={{custt.SupplierTypeId}}>{{custt.SupplierTypeName}}
+            </option>
+        </select>
+    </div>
+    <br />
+    <button (click)="goBack()" class="btn btn-secondary me-3">Go Back</button>
+    <button type="submit" class="btn btn-secondary">Submit</button>
+</form>

@@ -1,0 +1,26 @@
+<h2>Add New Customer</h2>
+<form [formGroup]="customerAdd" (ngSubmit)="submitCustomer()" #formDir="ngForm">
+    <div>
+        <label for="CustomerName">Name:</label>
+        <input class="form-control" placeholder="customer name" formControlName="CustomerName" />
+        <br />
+
+        <label for="CustomerAddress">Address:</label>
+        <input class="form-control" placeholder="customer address" formControlName="CustomerAddress" />
+        <br />
+
+        <label for="Customer Type">Customer Type</label>
+        <!-- <select class="form-select" formControlName="CustomerTypeId">
+            <option value="0" selected disabled>Select Customer Type</option>
+            <option *ngFor="let custt of customertypes" value={{custt.CustomerTypeId}}>{{custt.CustomerTypeName}}
+            </option>
+        </select> -->
+
+        <kendo-dropdownlist class="form-control" formControlName="CustomerTypeId" [data]="customertypes"
+            [textField]="'CustomerTypeName'" [valueField]="'Id'" [valuePrimitive]="true">
+        </kendo-dropdownlist>
+    </div>
+    <br />
+    <button (click)="goBack()" class="btn btn-secondary me-3">Go Back</button>
+    <button type="submit" class="btn btn-secondary">Submit</button>
+</form>

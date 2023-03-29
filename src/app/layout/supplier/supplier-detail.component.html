@@ -1,0 +1,36 @@
+<div *ngIf="supplierEdit.value">
+    <h2>{{supplierEdit.value.SupplierName | uppercase}} Details</h2>
+    <div><span>Supplier ID : </span>{{supplierEdit.value.Id}}</div>
+    <br />
+    <form [formGroup]="supplierEdit" (ngSubmit)="saveSupplier()">
+        <div>
+            <label for="SupplierName">Name</label>
+            <input class="form-control" placeholder="name" formControlName="SupplierName">
+            <br />
+
+            <label for="SupplierAddress">Address</label>
+            <input class="form-control" placeholder="address" formControlName="SupplierAddress" />
+            <br />
+
+            <label for="RegisterDate">RegisterDate</label>
+            <input class="form-control" placeholder="register date" formControlName="RegisterDate" />
+            <br />
+
+            <label for="SupplierTypeId">SupplierTypeId</label>
+            <input class="form-control" placeholder="Id" formControlName="SupplierTypeId" />
+            <br />
+
+            <label for="SupplierType">SupplierType</label>
+            <input class="form-control" placeholder="Id" formControlName="SupplierType" />
+            <br />
+
+            <label for="Supplier Type">Supplier Type</label>
+            <select class="form-control" formControlName="SupplierTypeId">
+                <option *ngFor="let custt of suppliertypes" value={{custt.Id}}>{{custt.SupplierTypeName}}</option>
+            </select>
+        </div>
+        <br />
+        <button type="button" (click)="goBack()">go back</button> &nbsp;
+        <button type="submit">Submit</button>
+    </form>
+</div>

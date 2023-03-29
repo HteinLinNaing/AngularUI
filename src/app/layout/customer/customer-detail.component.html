@@ -1,0 +1,31 @@
+<div *ngIf="customerEdit.value">
+    <h2>{{customerEdit.value.CustomerName | uppercase}} Details</h2>
+    <div><span>Customer ID : </span>{{customerEdit.value.Id}}</div>
+    <br />
+    <form [formGroup]="customerEdit" (ngSubmit)="saveCustomer()">
+        <div>
+            <input type="hidden" class="form-control" placeholder="id" formControlName="Id">
+
+            <label for="CustomerName">Name</label>
+            <input class="form-control" placeholder="name" formControlName="CustomerName">
+            <br />
+
+            <label for="RegisterDate">RegisterDate</label>
+            <input class="form-control" placeholder="register date" formControlName="RegisterDate" />
+            <br />
+
+            <label for="CustomerAddress">Address</label>
+            <input class="form-control" placeholder="address" formControlName="CustomerAddress" />
+            <br />
+
+            <label for="CustomerType">Customer Type</label>
+            <select class="form-select" formControlName="CustomerTypeId">
+                <option *ngFor="let custt of customertypes" value={{custt.CustomerTypeId}}>{{custt.CustomerTypeName}}
+                </option>
+            </select>
+        </div>
+        <br />
+        <button class="btn btn-secondary text-black me-3" type="button" (click)="goBack()">go back</button> &nbsp;
+        <button class="btn btn-secondary text-black" type="submit">Submit</button>
+    </form>
+</div>

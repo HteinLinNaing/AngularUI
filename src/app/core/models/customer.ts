@@ -1,7 +1,7 @@
-export interface Customer {
+export class Customer {
     Id: number;
     CustomerName: string;
-    RegisterDate: string;
+    RegisterDate: Date;
     CustomerAddress: string;
     CustomerTypeId: number;
     CustomerPhoto: string;

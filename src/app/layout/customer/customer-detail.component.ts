@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Customer } from '../../core/models/customer';
 import { CustomerService } from '../../core/services/customer.service';
 import { Location } from '@angular/common'
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { CustomerType } from '../..//core/models/customer-type';
 import { CustomerTypeService } from '../../core/services/customer-type.service';
 
@@ -19,8 +19,8 @@ export class CustomerDetailComponent {
 
     customerEdit = this.fb.group({
         Id: [0],
-        CustomerName: [''],
-        RegisterDate: [''],
+        CustomerName: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
+        RegisterDate: [new Date],
         CustomerAddress: [''],
         CustomerTypeId: [0],
         CustomerPhoto: ['']

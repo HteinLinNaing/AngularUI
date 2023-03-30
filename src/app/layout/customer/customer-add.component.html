@@ -3,6 +3,18 @@
     <div>
         <label for="CustomerName">Name:</label>
         <input class="form-control" placeholder="customer name" formControlName="CustomerName" />
+        <div *ngIf="customerAdd.get('CustomerName').invalid && customerAdd.get('CustomerName').errors.required"
+            class="text-danger mt-2 ms-1">
+            <small>Customer Name is required.</small>
+        </div>
+        <div *ngIf="customerAdd.get('CustomerName').invalid && customerAdd.get('CustomerName').errors.maxlength"
+            class="text-danger mt-2 ms-1">
+            <small>Customer Name must be maximum 20 characters long.</small>
+        </div>
+        <div *ngIf="customerAdd.get('CustomerName').invalid && customerAdd.get('CustomerName').errors.minlength"
+            class="text-danger mt-2 ms-1">
+            <small>Customer Name must be minimum 5 characters long.</small>
+        </div>
         <br />
 
         <label for="CustomerAddress">Address:</label>
@@ -10,15 +22,15 @@
         <br />
 
         <label for="Customer Type">Customer Type</label>
-        <!-- <select class="form-select" formControlName="CustomerTypeId">
+        <select class="form-select" formControlName="CustomerTypeId">
             <option value="0" selected disabled>Select Customer Type</option>
             <option *ngFor="let custt of customertypes" value={{custt.CustomerTypeId}}>{{custt.CustomerTypeName}}
             </option>
-        </select> -->
+        </select>
 
-        <kendo-dropdownlist class="form-control" formControlName="CustomerTypeId" [data]="customertypes"
+        <!-- <kendo-dropdownlist class="form-control" formControlName="CustomerTypeId" [data]="customertypes"
             [textField]="'CustomerTypeName'" [valueField]="'Id'" [valuePrimitive]="true">
-        </kendo-dropdownlist>
+        </kendo-dropdownlist> -->
     </div>
     <br />
     <button (click)="goBack()" class="btn btn-secondary me-3">Go Back</button>

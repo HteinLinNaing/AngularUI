@@ -18,10 +18,9 @@ export class SupplierDetailComponent {
     supplierEdit = this.fb.group({
         Id: [0],
         SupplierName: [''],
-        RegisterDate: [''],
+        RegisterDate: [new Date],
         SupplierAddress: [''],
         SupplierTypeId: [0],
-        SupplierType: [''],
         SupplierPhoto: ['']
     });
 
@@ -39,39 +38,21 @@ export class SupplierDetailComponent {
         this.getSupplier();
     }
 
-    // getSupplier(): void {
-    //     const id = Number(this.route.snapshot.paramMap.get('id'));
-    //     this.supplierService.getSupplier(id)
-    //         .subscribe(supplier => this.supplier = supplier);
-    // }
-
     getSupplier(): void {
         const id = +this.route.snapshot.paramMap.get('id');
 
-        // console.log(this.supplierEdit.value);
 
         this.supplierService.getSupplier(id)
             .subscribe(ressupplier => {
                 this.supplierEdit.setValue(ressupplier);
-                console.log(this.supplierEdit.value)
                 this.selectedSuppliertype = ressupplier.SupplierTypeId;
             });
-
-        console.log(this.supplierEdit.value)
     }
-
-
-    // save(): void {
-    //     if (this.supplier) {
-    //         this.supplierService.updateSupplier(this.supplier)
-    //             .subscribe(() => this.goBack());
-    //     }
-    // }
 
     saveSupplier(): void {
         this.supplierService.updateSupplier(this.supplierEdit.getRawValue())
             .subscribe(ressupplier => {
-                this.router.navigate(['/suppliers']);
+                this.router.navigate(['/supplier']);
             });
     }
 

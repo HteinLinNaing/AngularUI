@@ -4,6 +4,8 @@
     <br />
     <form [formGroup]="supplierEdit" (ngSubmit)="saveSupplier()">
         <div>
+            <input type="hidden" class="form-control" placeholder="id" formControlName="Id">
+
             <label for="SupplierName">Name</label>
             <input class="form-control" placeholder="name" formControlName="SupplierName">
             <br />
@@ -16,21 +18,14 @@
             <input class="form-control" placeholder="register date" formControlName="RegisterDate" />
             <br />
 
-            <label for="SupplierTypeId">SupplierTypeId</label>
-            <input class="form-control" placeholder="Id" formControlName="SupplierTypeId" />
-            <br />
-
-            <label for="SupplierType">SupplierType</label>
-            <input class="form-control" placeholder="Id" formControlName="SupplierType" />
-            <br />
-
             <label for="Supplier Type">Supplier Type</label>
             <select class="form-control" formControlName="SupplierTypeId">
-                <option *ngFor="let custt of suppliertypes" value={{custt.Id}}>{{custt.SupplierTypeName}}</option>
+                <option *ngFor="let suppt of suppliertypes" value={{suppt.SupplierTypeId}}>{{suppt.SupplierTypeName}}
+                </option>
             </select>
         </div>
         <br />
-        <button type="button" (click)="goBack()">go back</button> &nbsp;
-        <button type="submit">Submit</button>
+        <button class="btn btn-secondary me-1" type="button" (click)="goBack()">go back</button> &nbsp;
+        <button class="btn btn-secondary" type="submit">Submit</button>
     </form>
 </div>

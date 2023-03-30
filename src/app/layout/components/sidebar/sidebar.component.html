@@ -54,15 +54,21 @@
                         </a>
                     </li>
                     <li>
+                        <a [routerLink]="['/customers/inline']">
+                            <i class="fa fa-th-list"></i>&nbsp;
+                            <span>{{ 'Customer Inline' | translate }}</span>
+                        </a>
+                    </li>
+                    <li>
                         <a [routerLink]="['/supplier']">
                             <i class="fa fa-th-list"></i>&nbsp;
                             <span>{{ 'Supplier List' | translate }}</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)">
-                            <i class="fa fa-monument"></i>&nbsp;
-                            <span>{{ 'Submenu' | translate }}</span>
+                        <a [routerLink]="['/supplier/inline']">
+                            <i class="fa fa-th-list"></i>&nbsp;
+                            <span>{{ 'Supplier Inline' | translate }}</span>
                         </a>
                     </li>
                 </ul>

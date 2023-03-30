@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { CustomerService } from '../../core/services/customer.service';
@@ -26,7 +26,7 @@ export class CustomerAddComponent {
     ngOnInit(): void {
         this.customertypeService.getCustomerTypes().subscribe(resdepts => this.customertypes = resdepts);
         this.customerAdd = new FormGroup({
-            CustomerName: new FormControl(''),
+            CustomerName: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]),
             CustomerAddress: new FormControl(''),
             CustomerTypeId: new FormControl(0)
         });

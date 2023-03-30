@@ -32,11 +32,10 @@ export class SupplierAddComponent {
         });
     }
 
-
     submitSupplier(): void {
         this.supplierService.addSupplier(this.supplierAdd.value)
             .subscribe(ressupplier => {
-                this.router.navigate(['/suppliers']);
+                this.router.navigate(['/supplier']);
             });
     }
 

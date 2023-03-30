@@ -1,9 +1,8 @@
-export interface Supplier {
+export class Supplier {
     Id: number;
     SupplierName: string;
-    RegisterDate: string;
+    RegisterDate: Date;
     SupplierAddress: string;
     SupplierTypeId: number;
-    SupplierType: string;
     SupplierPhoto: string;
 }

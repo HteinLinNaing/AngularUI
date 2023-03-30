@@ -1,7 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { GridDataResult } from '@progress/kendo-angular-grid';
+import { DataSourceRequestState } from '@progress/kendo-data-query';
 import { catchError, Observable, of, tap } from 'rxjs';
 import { Supplier } from '../models/supplier';
+import { ApiService } from './api.service';
 import { MessageService } from './message.service';
 
 @Injectable({
@@ -18,6 +21,7 @@ export class SupplierService {
     constructor(
         private http: HttpClient,
         private messageService: MessageService,
+        private apiservice: ApiService,
     ) { }
 
     getSuppliers(): Observable<Supplier[]> {
@@ -35,6 +39,10 @@ export class SupplierService {
                 tap(_ => this.log(`fetched supplier id=${id}`)),
                 catchError(this.handleError<Supplier>(`get supplier id=${id}`))
             );
+    }
+
+    getSupplierGrid(girdState: DataSourceRequestState): Observable<GridDataResult> {
+        return this.apiservice.fetchgridpostJson('/supplier/showlist/', girdState);
     }
 
     // ? PUT: update the supplier on the server

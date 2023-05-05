@@ -1,0 +1,69 @@
+<h2>My Admins</h2>
+<div class="grid-wrapper">
+    <kendo-grid
+        [data]="admingrid | async"
+        [pageSize]="gridState.take"
+        [skip]="gridState.skip"
+        [sort]="gridState.sort"
+        [filter]="gridState.filter"
+        [sortable]="true"
+        [pageable]="true"
+        [resizable]="true"
+        [filterable]="true"
+        [height]="410"
+        (remove)="removeHandler($event)"
+        (dataStateChange)="onStateChange($event)"
+    >
+        <ng-template kendoGridToolbarTemplate>
+            <button routerLink="/admin/add" kendoGridAddCommand *ngxPermissionsOnly="'add'">Add new</button>
+        </ng-template>
+        <kendo-grid-column field="Id" title="ID" [width]="30" filter="numeric"></kendo-grid-column>
+        <kendo-grid-column field="AdminName" title="Name" [width]="40"></kendo-grid-column>
+        <kendo-grid-column field="Email" title="Email" [width]="80"></kendo-grid-column>
+        <kendo-grid-column field="LoginName" title="Login Name" [width]="40"></kendo-grid-column>
+        <kendo-grid-column field="AdminLevelName" title="Admin Level" [width]="40"></kendo-grid-column>
+        <kendo-grid-column field="IsActive" title="Status" [sortable]="false" [width]="40">
+            <ng-template kendoGridCellTemplate let-isActive="dataItem.IsActive" let-dataItem>
+                <button
+                    *ngIf="dataItem.AdminLevelId != 1"
+                    (click)="adminStatus(dataItem)"
+                    class="btn btn-sm {{ isActive ? 'btn-success' : 'btn-danger' }}"
+                >
+                    {{ isActive ? 'Active' : 'InActive' }}
+                </button>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column title="Actions" width="120">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <button
+                    class="me-2"
+                    routerLink="detail/{{ dataItem.Id }}"
+                    kendoGridEditCommand
+                    [primary]="true"
+                    *ngxPermissionsOnly="'edit'"
+                >
+                    Edit
+                </button>
+                <button kendoGridRemoveCommand *ngxPermissionsOnly="'delete'">Remove</button>
+                <button
+                    class="btn btn-sm btn-warning ms-2"
+                    *ngxPermissionsOnly="'ResetPassword'"
+                    routerLink="resetpassword/{{ dataItem.Id }}"
+                >
+                    Reset Password
+                </button>
+            </ng-template>
+        </kendo-grid-column>
+    </kendo-grid>
+
+    <!-- ? Grid Loading -->
+    <div *ngIf="admingrid.gridLoading" class="k-i-loading"></div>
+</div>
+
+<kendo-dialog title="Please confirm" *ngIf="itemToRemove" (close)="confirmRemove(false)">
+    <p style="margin: 30px; text-align: center">Are you sure you want to delete {{ itemToRemove.AdminName }}?</p>
+    <kendo-dialog-actions>
+        <button class="k-button" (click)="confirmRemove(false)">No</button>
+        <button class="k-button k-primary" (click)="confirmRemove(true)" primary="true">Yes</button>
+    </kendo-dialog-actions>
+</kendo-dialog>

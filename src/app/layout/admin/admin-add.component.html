@@ -1,0 +1,91 @@
+<h2>Add New Admin</h2>
+<form [formGroup]="adminAdd" (ngSubmit)="submitAdmin()" #formDir="ngForm">
+    <div>
+        <label for="AdminName">Name:</label>
+        <input class="form-control" placeholder="Admin Name" formControlName="AdminName" />
+        <div
+            *ngIf="adminAdd.get('AdminName').invalid && adminAdd.get('AdminName').errors.required"
+            class="text-danger mt-2 ms-1"
+        >
+            <small>Admin Name is required.</small>
+        </div>
+        <div
+            *ngIf="adminAdd.get('AdminName').invalid && adminAdd.get('AdminName').errors.maxlength"
+            class="text-danger mt-2 ms-1"
+        >
+            <small>Admin Name must be maximum 20 characters long.</small>
+        </div>
+        <div
+            *ngIf="adminAdd.get('AdminName').invalid && adminAdd.get('AdminName').errors.minlength"
+            class="text-danger mt-2 ms-1"
+        >
+            <small>Admin Name must be minimum 5 characters long.</small>
+        </div>
+        <br />
+
+        <label for="Email">Email:</label>
+        <input class="form-control" placeholder="Email" formControlName="Email" />
+        <br />
+
+        <label for="LoginName">Login Name:</label>
+        <input class="form-control" placeholder="Login Name" formControlName="LoginName" />
+        <br />
+
+        <label for="Password">Password:</label>
+        <input class="form-control" type="password" placeholder="Password" formControlName="Password" />
+        <div
+            *ngIf="adminAdd.get('Password').invalid && adminAdd.get('Password').errors.required"
+            class="text-danger mt-2 ms-1"
+        >
+            <small>Password is required.</small>
+        </div>
+        <div
+            *ngIf="adminAdd.get('Password').invalid && adminAdd.get('Password').errors.minlength"
+            class="text-danger mt-2 ms-1"
+        >
+            <small>Password must be minimum 8 characters long.</small>
+        </div>
+        <br />
+
+        <label for="Confirm Password">Confirm Password:</label>
+        <input class="form-control" type="password" placeholder="Confirm Password" formControlName="ConfirmPassword" />
+        <div *ngIf="adminAdd.hasError('passwordMismatch')" class="text-danger mt-2 ms-1">
+            <small>Password do not match.</small>
+        </div>
+        <br />
+
+        <label for="Admin Level">Admin Level:</label>
+        <kendo-dropdownlist
+            class="form-control mb-3"
+            formControlName="AdminLevelId"
+            [data]="adminlevel"
+            [textField]="'AdminLevelName'"
+            [valueField]="'AdminLevelId'"
+            [valuePrimitive]="true"
+        >
+        </kendo-dropdownlist>
+
+        <label for="AdminPhoto">Admin Photo: </label>
+        <div class="col-md-12">
+            <div class="form-group row mt-3">
+                <div class="col-auto">
+                    <kendo-upload
+                        class="selector"
+                        name="image"
+                        formControlName="AdminPhoto"
+                        (success)="successEventHandler($event)"
+                        (remove)="removeEventHandler($event)"
+                        (upload)="uploadEventHandler($event)"
+                        [multiple]="false"
+                        [saveUrl]="uploadSaveUrl"
+                        [removeUrl]="uploadRemoveUrl"
+                    >
+                    </kendo-upload>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <button (click)="goBack($event)" class="btn btn-secondary me-3">Go Back</button>
+    <button type="submit" [disabled]="adminAdd.invalid" class="btn btn-secondary">Submit</button>
+</form>

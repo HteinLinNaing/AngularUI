@@ -1,8 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { DataSourceRequestState } from '@progress/kendo-data-query';
-import { catchError, Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Customer } from '../models/customer';
 import { ApiService } from './api.service';
 import { MessageService } from './message.service'
@@ -10,83 +9,88 @@ import { MessageService } from './message.service'
 @Injectable({
     providedIn: 'root'
 })
-export class CustomerService {
+export class CustomerService extends BehaviorSubject<GridDataResult> {
 
-    private customerUrl = 'http://localhost:3600/api/Customer';  // URL to web api
-
-    httpOptions = {
-        headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-    };
+    public gridLoading: boolean;
 
     constructor(
-        private http: HttpClient,
         private messageService: MessageService,
         private apiservice: ApiService,
-    ) { }
+    ) {
+        super(null);
+    }
 
     getCustomers(): Observable<Customer[]> {
-        return this.http.get<Customer[]>(this.customerUrl)
-            .pipe(
-                tap(_ => this.log('fetched customers')),
-                catchError(this.handleError<Customer[]>('getCustomers', []))
-            );
+        this.messageService.add('CustomerService: fetched customers');
+        return this.apiservice.get("/customer");
     }
 
     getCustomer(id: number): Observable<Customer> {
-        const url = `${this.customerUrl}/${id}`;
-        return this.http.get<Customer>(url)
-            .pipe(
-                tap(_ => this.log(`fetched customer id=${id}`)),
-                catchError(this.handleError<Customer>(`get customer id=${id}`))
-            );
+        this.messageService.add(`CustomerService: fetched Customer id=${id}`);
+        return this.apiservice.get(`/customer/${id}`);
     }
 
-    getCustomerGrid(girdState: DataSourceRequestState): Observable<GridDataResult> {
-        return this.apiservice.fetchgridpostJson('/customer/showlist/', girdState);
+    // getCustomerGrid(girdState: DataSourceRequestState): Observable<GridDataResult> {
+    //     return this.apiservice.fetchgridpostJson('/customer/showlist/', girdState);
+    // }
+
+    // ? For Grid Loading
+    getCustomerGrid(girdState: DataSourceRequestState) {
+        this.gridLoading = true;
+        return this.apiservice.fetchgridpostJson('/customer/showlist', girdState)
+            .subscribe(x => {
+                super.next(x);
+                this.gridLoading = false;
+            });
+    }
+
+    getCustomerReport(girdState: DataSourceRequestState, filterSet: any) {
+        this.gridLoading = true;
+        return this.apiservice.fetchgridpostJsonData('/customer/report', girdState, filterSet)
+            .subscribe(x => {
+                super.next(x);
+                this.gridLoading = false;
+            });
     }
 
     // ? PUT: update the customer on the server
-    updateCustomer(customer: Customer): Observable<any> {
-        const url = `${this.customerUrl}/${customer.Id}`;
-        return this.http.put(url, customer, this.httpOptions).pipe(
-            tap(_ => this.log(`updated customer id = ${customer.Id}`)),
-            catchError(this.handleError<any>('updateCustomer'))
-        );
+    updateCustomer(Customer: Customer): Observable<any> {
+        this.messageService.add(`CustomerService: update Customer =${Customer.CustomerName}`);
+        return this.apiservice.putJson('/customer/updatecustomer/' + Customer.Id, Customer);
     }
 
-    /** POST: add a new customer to the server */
-    addCustomer(customer: Customer): Observable<Customer> {
-        return this.http.post<Customer>(this.customerUrl, customer, this.httpOptions).pipe(
-            tap((newCustomer: Customer) => this.log(`added customer w/ id=${newCustomer.Id}`)),
-            catchError(this.handleError<Customer>('addCustomer'))
-        );
+    // ? POST: add a new customer to the server
+    addCustomer(Customer: Customer): Observable<Customer> {
+        this.messageService.add(`CustomerService: add Customer =${Customer.CustomerName}`);
+        return this.apiservice.postJson('/customer/addcustomer', Customer);
     }
 
-    /** DELETE: delete the customer from the server */
+    // ? DELETE: delete the customer from the server
     deleteCustomer(id: number): Observable<Customer> {
-        const url = `${this.customerUrl}/${id}`;
-
-        return this.http.delete<Customer>(url, this.httpOptions).pipe(
-            tap(_ => this.log(`deleted customer id=${id}`)),
-            catchError(this.handleError<Customer>('deleteCustomer'))
-        );
+        this.messageService.add(`CustomerService: delete Customer id=${id}`);
+        return this.apiservice.delete('/customer/deletecustomer/' + id);
     }
 
-    // TODO: For Message Services
-    private handleError<T>(operation = 'operation', result?: T) {
-        return (error: any): Observable<T> => {
-            // TODO: send the error to remote logging infrastructure
-            console.error(error); // log to console instead
+    // ? GET employees whose name contains search term
+    searchCustomeres(term: string): Observable<Customer[]> {
+        if (!term.trim()) {
+            // if not search term, return empty Customer array.
+            return of([]);
+        }
 
-            // TODO: better job of transforming error for user consumption
-            this.log(`${operation} failed: ${error.message}`);
-
-            // Let the app keep running by returning an empty result.
-            return of(result as T);
-        };
+        this.messageService.add('CustomerService: search employees');
+        return this.apiservice.postJson("/customer/search/", term);
     }
-    /** Log a HeroService message with the MessageService */
-    private log(message: string) {
-        this.messageService.add(`CustomerService: ${message}`);
+
+    getImagePath(id: number): Observable<any> {
+        const base64 = btoa(id.toString())
+
+        return this.apiservice.get(`/fileservice/download/CustomerPhoto/${base64}`);
+    }
+
+    deleteCustomerPhoto(id: number): Observable<any> {
+        const base64 = btoa(id.toString())
+
+        return this.apiservice.postJson(`/fileservice/remove/CustomerPhoto/${base64}`, '');
     }
 }

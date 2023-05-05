@@ -1,0 +1,89 @@
+<h3>Manage Admin Level</h3>
+<div class="">
+    <div class="row">
+        <div class="col-12">
+            <button class="btn btn-sm btn-info mb-2" (click)="addHandler($event)">Add New</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-5">
+            <div class="list-group w-75 shadow-sm mt-1" *ngIf="adminLevelList">
+                <a
+                    (click)="permissionHandler(adminlevel)"
+                    class="
+                    pointer
+                    d-flex justify-content-between
+                    list-group-item
+                    list-group-item-action
+                    {{ adminlevel.AdminLevelId == 1 ? 'disabled' : '' }}
+                    {{ isPermissionTree.AdminLevelId == adminlevel.AdminLevelId ? 'active' : '' }}"
+                    *ngFor="let adminlevel of adminLevelList"
+                >
+                    <span>
+                        {{ adminlevel.AdminLevelName }}
+                    </span>
+                    <span>
+                        <button
+                            class="me-2 btn btn-sm btn-warning"
+                            *ngxPermissionsOnly="'edit'"
+                            (click)="editHandler($event, adminlevel)"
+                        >
+                            Edit
+                        </button>
+                        <button
+                            class="btn btn-sm btn-danger"
+                            *ngxPermissionsOnly="'delete'"
+                            (click)="deleteHandler($event, adminlevel)"
+                        >
+                            Remove
+                        </button>
+                    </span>
+                </a>
+            </div>
+        </div>
+        <div class="col-7">
+            <!-- ! TreeView Permission -->
+            <div *ngIf="isPermissionTree">
+                <h4>{{ isPermissionTree.AdminLevelName }} Permissions</h4>
+                <kendo-treeview
+                    [nodes]="adminMenus"
+                    [childrenField]="'children'"
+                    [(checkedKeys)]="checkedKeys"
+                    [checkBy]="key"
+                    [isChecked]="isChecked"
+                    [kendoTreeViewCheckable]="checkableSettings"
+                    [size]="componentSizes"
+                    textField="menu_name"
+                    kendoTreeViewCheckable
+                    kendoTreeViewExpandable
+                    kendoTreeViewHierarchyBinding
+                    (checkedKeysChange)="onCheckedKeysChange($event)"
+                ></kendo-treeview>
+                <button
+                    class="btn btn-secondary me-2 {{ !saveBtn ? 'disabled' : '' }}"
+                    (click)="onSaveChange(isPermissionTree.AdminLevelId)"
+                >
+                    Save Change
+                </button>
+                <button class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+            </div>
+
+            <!-- ! Add Form -->
+            <app-admin-level-add *ngIf="addFrom" (addHandlerEvent)="receiveAddEvent($event)"></app-admin-level-add>
+            <!-- ! Edit Form -->
+            <app-admin-level-detail
+                *ngIf="editForm"
+                [adminlevel]="editForm"
+                (editHandlerEvent)="receiveEditEvent($event)"
+            ></app-admin-level-detail>
+        </div>
+    </div>
+</div>
+
+<kendo-dialog title="Please confirm" *ngIf="itemToRemove" (close)="confirmRemove(false)">
+    <p style="margin: 30px; text-align: center">Are you sure you want to delete {{ itemToRemove.AdminLevelName }}?</p>
+    <kendo-dialog-actions>
+        <button class="k-button" (click)="confirmRemove(false)">No</button>
+        <button class="k-button k-primary" (click)="confirmRemove(true)" primary="true">Yes</button>
+    </kendo-dialog-actions>
+</kendo-dialog>

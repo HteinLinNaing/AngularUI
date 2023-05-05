@@ -1,26 +1,18 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { CustomerType } from '../models/customer-type';
-import { MessageService } from './message.service';
+import { ApiService } from './api.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CustomerTypeService {
 
-    private customerTypeUrl = 'http://localhost:3600/api/CustomerType';  // URL to web api
-
-    httpOptions = {
-        headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-    };
-
     constructor(
-        private http: HttpClient,
-        private messageService: MessageService,
+        private apiService: ApiService,
     ) { }
 
     getCustomerTypes(): Observable<CustomerType[]> {
-        return this.http.get<CustomerType[]>(this.customerTypeUrl);
+        return this.apiService.get('/customertype');
     }
 }

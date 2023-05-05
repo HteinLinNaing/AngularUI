@@ -1499,12 +1499,12 @@
     "@progress/kendo-angular-schematics" "11.4.0"
     tslib "^2.3.1"
 
-"@progress/kendo-angular-inputs@^11.4.0":
-  version "11.4.0"
-  resolved "https://registry.npmjs.org/@progress/kendo-angular-inputs/-/kendo-angular-inputs-11.4.0.tgz"
-  integrity sha512-HarjI7wxDBu1RL06Uo/VWrlBYGMoQ3K39/k+z8GEuNm85RsNyY0dOT5spUQ8pEwd5Frg9lnKlVklQRO3NTtAWg==
+"@progress/kendo-angular-inputs@^11.6.0":
+  version "11.6.0"
+  resolved "https://registry.npmjs.org/@progress/kendo-angular-inputs/-/kendo-angular-inputs-11.6.0.tgz"
+  integrity sha512-ci1c2Z4a3sKQ5MNTeNqcSrK26xxIDPMKNJ1phs0O3vp3Jw8OoVHWwAeu2kXhlVZkyKhJhthhx0beGU4BvnuRAg==
   dependencies:
-    "@progress/kendo-angular-schematics" "11.4.0"
+    "@progress/kendo-angular-schematics" "11.6.0"
     "@progress/kendo-common" "^0.2.2"
     "@progress/kendo-draggable" "^3.0.0"
     "@progress/kendo-inputs-common" "^3.1.0"
@@ -1561,12 +1561,27 @@
     "@progress/kendo-popup-common" "^1.7.0"
     tslib "^2.3.1"
 
+"@progress/kendo-angular-progressbar@^11.4.0":
+  version "11.4.0"
+  resolved "https://registry.npmjs.org/@progress/kendo-angular-progressbar/-/kendo-angular-progressbar-11.4.0.tgz"
+  integrity sha512-4KMic5tQWjrNXSWM9yGH/wJWiBCLRdPM5ywrkae/BUI62wD6jReihw39MB+BtlQUGqWRQHU+PJOtqudX9cSDyA==
+  dependencies:
+    "@progress/kendo-angular-schematics" "11.4.0"
+    tslib "^2.3.1"
+
 "@progress/kendo-angular-schematics@11.4.0":
   version "11.4.0"
   resolved "https://registry.npmjs.org/@progress/kendo-angular-schematics/-/kendo-angular-schematics-11.4.0.tgz"
   integrity sha512-8+Dehr3NPtLqfjwF0ar6BDPSrPxRVPqT9py4BI9B7gqIhM3tdEnjTLj21ZMxAhr4vcNi127hKC6acW/XsbT8tA==
   dependencies:
     "@progress/kendo-angular-schematics" "11.4.0"
+
+"@progress/kendo-angular-schematics@11.6.0":
+  version "11.6.0"
+  resolved "https://registry.npmjs.org/@progress/kendo-angular-schematics/-/kendo-angular-schematics-11.6.0.tgz"
+  integrity sha512-aur9+SNU4JhbeqNTkH9BmlnzOnhLCjSV6RL2OwIWdrsJ0edpaHlWs79l1HQDzfgjQ1q/SFPAByAo5enSHb97Rg==
+  dependencies:
+    "@progress/kendo-angular-schematics" "11.6.0"
 
 "@progress/kendo-angular-treeview@^11.4.0":
   version "11.4.0"
@@ -1576,6 +1591,14 @@
     "@progress/kendo-angular-schematics" "11.4.0"
     "@progress/kendo-common" "^0.2.0"
     "@progress/kendo-draggable" "^3.0.2"
+    tslib "^2.3.1"
+
+"@progress/kendo-angular-upload@^11.4.0":
+  version "11.4.0"
+  resolved "https://registry.npmjs.org/@progress/kendo-angular-upload/-/kendo-angular-upload-11.4.0.tgz"
+  integrity sha512-LBNZuJSJJNO/nlaX+1ylqO007S2KN5pvNe2f4huF8S7WGwlQxM1eyJq1Z9T1Om5kh3TUpyZM2/CEaUZ1yjNxtA==
+  dependencies:
+    "@progress/kendo-angular-schematics" "11.4.0"
     tslib "^2.3.1"
 
 "@progress/kendo-common@^0.2.0", "@progress/kendo-common@^0.2.1", "@progress/kendo-common@^0.2.2":
@@ -2994,6 +3017,11 @@ cross-spawn@^7.0.3:
     path-key "^3.1.0"
     shebang-command "^2.0.0"
     which "^2.0.1"
+
+crypto-js@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.npmjs.org/crypto-js/-/crypto-js-4.1.1.tgz"
+  integrity sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==
 
 css-loader@6.7.3:
   version "6.7.3"
@@ -5217,6 +5245,13 @@ ng2-charts@4.1.1:
   dependencies:
     lodash-es "^4.17.15"
     tslib "^2.3.0"
+
+ngx-permissions@^15.0.1:
+  version "15.0.1"
+  resolved "https://registry.npmjs.org/ngx-permissions/-/ngx-permissions-15.0.1.tgz"
+  integrity sha512-GjPF54B0DYtzqVb95YUh1XZivU4ilpCnx04gtADnIz4grihb/AtVwGwjgeeC1N/zrwUaZWLxTkIm5emN11JlDw==
+  dependencies:
+    tslib "^2.1.0"
 
 nice-napi@^1.0.2:
   version "1.0.2"

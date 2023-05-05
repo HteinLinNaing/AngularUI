@@ -4,7 +4,7 @@ import { environment } from '../../../environments/environment';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { MessageService } from './message.service';
-import { DataSourceRequestState, toDataSourceRequestString, translateDataSourceResultGroups } from '@progress/kendo-data-query';
+import { DataSourceRequestState, toDataSourceRequest, toDataSourceRequestString, translateDataSourceResultGroups } from '@progress/kendo-data-query';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 
 const httpOptionsJson = {
@@ -51,6 +51,17 @@ export class ApiService {
                 }))
             );
 
+    }
+
+    fetchgridpostJsonData(path: string, state: DataSourceRequestState, postdata: any): Observable<GridDataResult> {
+        const hasGroups = state.group && state.group.length;
+        return this.http.post(`${environment.apiUrl}${path}`, { gridState: toDataSourceRequest(state), data: postdata })
+            .pipe(
+                map((result: any) => (<GridDataResult>{
+                    data: hasGroups ? translateDataSourceResultGroups(result.Data) : result.Data,
+                    total: result.Total,
+                }))
+            );
     }
 
     get(path: string): Observable<any> {

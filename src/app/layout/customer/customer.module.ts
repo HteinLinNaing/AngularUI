@@ -13,6 +13,10 @@ import { CustomerDialogComponent } from './customer-dialog.component';
 import { DialogModule } from '@progress/kendo-angular-dialog';
 import { DatePickerModule } from '@progress/kendo-angular-dateinputs';
 import { CustomerInlineComponent } from './customer-inline.component';
+import { UploadsModule } from '@progress/kendo-angular-upload';
+import { InputsModule } from '@progress/kendo-angular-inputs';
+import { ProgressBarModule } from '@progress/kendo-angular-progressbar';
+import { NgxPermissionsModule } from 'ngx-permissions';
 
 
 @NgModule({
@@ -21,7 +25,7 @@ import { CustomerInlineComponent } from './customer-inline.component';
         CustomerAddComponent,
         CustomerDetailComponent,
         CustomerDialogComponent,
-        CustomerInlineComponent
+        CustomerInlineComponent,
     ],
     imports: [
         CommonModule,
@@ -32,7 +36,11 @@ import { CustomerInlineComponent } from './customer-inline.component';
         GridModule,
         DropDownListModule,
         DialogModule,
-        DatePickerModule
+        DatePickerModule,
+        UploadsModule,
+        InputsModule,
+        ProgressBarModule,
+        NgxPermissionsModule
     ]
 })
 export class CustomerModule { }

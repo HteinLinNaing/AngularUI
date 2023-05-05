@@ -13,6 +13,8 @@ import { SupplierDialogComponent } from './supplier-dialog.component';
 import { DialogModule } from '@progress/kendo-angular-dialog';
 import { DatePickerModule } from '@progress/kendo-angular-dateinputs';
 import { SupplierInlineComponent } from './supplier-inline.component';
+import { UploadsModule } from '@progress/kendo-angular-upload';
+import { NgxPermissionsModule } from 'ngx-permissions';
 
 
 @NgModule({
@@ -32,7 +34,9 @@ import { SupplierInlineComponent } from './supplier-inline.component';
         DropDownListModule,
         GridModule,
         DialogModule,
-        DatePickerModule
+        DatePickerModule,
+        UploadsModule,
+        NgxPermissionsModule
     ]
 })
 export class SupplierModule { }

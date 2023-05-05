@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { LocalStorageService } from '../../../core/services/localstorage.service';
 
 @Component({
     selector: 'app-sidebar',
@@ -11,16 +12,25 @@ export class SidebarComponent implements OnInit {
     isActive: boolean;
     collapsed: boolean;
     showMenu: string;
+    menu = [];
     pushRightClass: string;
 
     @Output() collapsedEvent = new EventEmitter<boolean>();
 
-    constructor(private translate: TranslateService, public router: Router) {
+    constructor(
+        private translate: TranslateService,
+        public router: Router,
+        private localStorageService: LocalStorageService,
+    ) {
         this.router.events.subscribe((val) => {
             if (val instanceof NavigationEnd && window.innerWidth <= 992 && this.isToggled()) {
                 this.toggleSidebar();
             }
         });
+        const menulist = JSON.parse(this.localStorageService.getItem('menuList'));
+        if (menulist) {
+            this.menu = this.createMenuTree(menulist, 0);
+        }
     }
 
     ngOnInit() {
@@ -68,5 +78,40 @@ export class SidebarComponent implements OnInit {
 
     onLoggedout() {
         localStorage.removeItem('isLoggedin');
+    }
+
+    // set menu
+    createMenuTree(db_data, ParentId) {
+        let nodes, node_item, menu_id;
+        // let sub_nodes = ''  ,
+        let menu_ui_sref_text, label_text, parent_id, tree_icon_text, permission;
+        const i = 0;
+        const nodeObj = [];
+        nodes = this.filterJson(db_data, 'ParentId', ParentId);
+        for (let i = 0; i < nodes.length; i++) {
+            if (nodes.length > 0) {
+                node_item = nodes[i];       // id
+                menu_id = node_item['MenuID'];      // menu id
+                menu_ui_sref_text = node_item['ControllerName'];    // Controller name
+                label_text = node_item['MenuName'];     //menu name
+                parent_id = node_item['ParentId'];      // parent id
+                tree_icon_text = node_item['Icon'];     // icon
+                permission = node_item['Permission'];   //permission
+
+                nodeObj.push({
+                    label: label_text, menu_ui_sref: menu_ui_sref_text,
+                    tree_icon: tree_icon_text, menu_permission: permission,
+                    menu_parent: parent_id
+                });
+                nodeObj[i].children = this.createMenuTree(db_data, menu_id);
+            }
+        }
+        // console.log(nodeObj);
+        return nodeObj;
+    }
+
+    // json filter
+    filterJson(jsonobj: any, field: string, value: number) {
+        return jsonobj.filter(s => s[field] == value);
     }
 }

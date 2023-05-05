@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { GridDataResult, DataStateChangeEvent } from '@progress/kendo-angular-grid';
 import { IntlService } from '@progress/kendo-angular-intl';
 import { DataSourceRequestState } from '@progress/kendo-data-query';
+import { Observable } from 'rxjs';
 import { Supplier } from '../../core/models/supplier';
 import { SupplierType } from '../../core/models/supplier-type';
 import { SupplierTypeService } from '../../core/services/supplier-type.service';
@@ -15,7 +16,7 @@ import { SupplierService } from '../../core/services/supplier.service';
     styleUrls: ['./supplier-inline.component.scss']
 })
 export class SupplierInlineComponent {
-    public suppliergrid: GridDataResult;
+    public suppliergrid: Observable<GridDataResult>;
     public itemToRemove: any;
     public supplierDataItem: Supplier;
     public isNew: boolean;
@@ -49,10 +50,10 @@ export class SupplierInlineComponent {
     }
 
     getSuppliers(): void {
-        this.supplierService.getSupplierGrid(this.gridState)
-            .subscribe(ressuppliers => this.suppliergrid = ressuppliers);
-        // this.suppliergrid = this.supplierService;
-        // this.supplierService.getSupplierGrid(this.gridState);
+        // this.supplierService.getSupplierGrid(this.gridState)
+        //     .subscribe(ressuppliers => this.suppliergrid = ressuppliers);
+        this.suppliergrid = this.supplierService;
+        this.supplierService.getSupplierGrid(this.gridState);
     }
 
     private closeEditor(grid, rowIndex = this.editedRowIndex) {

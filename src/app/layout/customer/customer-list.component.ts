@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DataStateChangeEvent, GridDataResult } from '@progress/kendo-angular-grid';
 import { DataSourceRequestState } from '@progress/kendo-data-query';
+import { Observable } from 'rxjs';
 import { Customer } from '../../core/models/customer';
 import { CustomerService } from '../../core/services/customer.service';
 import { MessageService } from '../../core/services/message.service';
@@ -11,7 +12,8 @@ import { MessageService } from '../../core/services/message.service';
     styleUrls: ['./customer-list.component.scss']
 })
 export class CustomerListComponent {
-    public customergrid: GridDataResult;
+    // public customergrid: GridDataResult;
+    public customergrid: Observable<GridDataResult>;
     customers: Customer[] = [];
     public customerDataItem: Customer;
     public isNew: boolean;
@@ -36,8 +38,10 @@ export class CustomerListComponent {
     }
 
     getCustomers(): void {
-        this.customerService.getCustomerGrid(this.gridState)
-            .subscribe(rescustomers => this.customergrid = rescustomers);
+        // this.customerService.getCustomerGrid(this.gridState)
+        //     .subscribe(rescustomers => this.customergrid = rescustomers);
+        this.customergrid = this.customerService;
+        this.customerService.getCustomerGrid(this.gridState);
     }
 
     delete(customer: Customer): void {
@@ -75,20 +79,20 @@ export class CustomerListComponent {
         this.customerDataItem = undefined;
     }
 
-    public removeHandler({dataItem}) {
+    public removeHandler({ dataItem }) {
         this.itemToRemove = dataItem;
     }
 
     public confirmRemove(shouldRemove: boolean): void {
         if (shouldRemove) {
-          this.customerService.deleteCustomer(this.itemToRemove.Id).subscribe(deletestatus => {
-              this.getCustomers();
-              console.log(deletestatus);
-          });
+            this.customerService.deleteCustomer(this.itemToRemove.Id).subscribe(deletestatus => {
+                this.getCustomers();
+                console.log(deletestatus);
+            });
         }
 
         this.itemToRemove = null;
-      }
+    }
 
     onStateChange(dstate: DataStateChangeEvent): void {
         //console.log(dstate);

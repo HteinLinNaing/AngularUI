@@ -1,0 +1,58 @@
+<div *ngIf="adminLevelEdit.value">
+    <h2>{{ adminLevelEdit.value.AdminLevelName | uppercase }} Details</h2>
+    <div><span>AdminLevelId : </span>{{ adminLevelEdit.value.AdminLevelId }}</div>
+    <br />
+    <form [formGroup]="adminLevelEdit" (ngSubmit)="saveAdminLevel()" #formDir="ngForm">
+        <div>
+            <label for="AdminLevelName">Admin Level Name:</label>
+            <input class="form-control" placeholder="Admin Level Name" formControlName="AdminLevelName" />
+            <div
+                *ngIf="
+                    adminLevelEdit.get('AdminLevelName').invalid && adminLevelEdit.get('AdminLevelName').errors.required
+                "
+                class="text-danger mt-2 ms-1"
+            >
+                <small>Admin Level Name is required.</small>
+            </div>
+            <div
+                *ngIf="
+                    adminLevelEdit.get('AdminLevelName').invalid &&
+                    adminLevelEdit.get('AdminLevelName').errors.maxlength
+                "
+                class="text-danger mt-2 ms-1"
+            >
+                <small>Admin Level Name must be maximum 20 characters long.</small>
+            </div>
+            <div
+                *ngIf="
+                    adminLevelEdit.get('AdminLevelName').invalid &&
+                    adminLevelEdit.get('AdminLevelName').errors.minlength
+                "
+                class="text-danger mt-2 ms-1"
+            >
+                <small>Admin Level Name must be minimum 5 characters long.</small>
+            </div>
+            <br />
+
+            <label for="Description">Description:</label>
+            <input class="form-control" placeholder="Description" formControlName="Description" />
+            <br />
+
+            <label for="Remark">Remark:</label>
+            <input class="form-control" placeholder="Remark" formControlName="Remark" />
+            <br />
+
+            <label for="ModifiedDate">Modified Date:</label>
+            <kendo-datepicker
+                class="form-control mb-3"
+                formControlName="ModifiedDate"
+                format="dd/MM/yyyy"
+            ></kendo-datepicker>
+            <br />
+        </div>
+        <br />
+
+        <button [disabled]="adminLevelEdit.invalid" type="submit" class="btn btn-secondary me-3">Save Change</button>
+        <button (click)="goBack($event)" class="btn btn-secondary">Cancel</button>
+    </form>
+</div>

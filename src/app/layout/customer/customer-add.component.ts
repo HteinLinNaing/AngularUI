@@ -28,7 +28,8 @@ export class CustomerAddComponent {
         this.customerAdd = new FormGroup({
             CustomerName: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]),
             CustomerAddress: new FormControl(''),
-            CustomerTypeId: new FormControl(0)
+            CustomerTypeId: new FormControl(0),
+            CustomerPhoto: new FormControl(''),
         });
     }
 

@@ -1,52 +1,56 @@
 <h2>My Customers</h2>
-
-<kendo-grid
-    [data]="customergrid"
-    [pageSize]="gridState.take"
-    [skip]="gridState.skip"
-    [sort]="gridState.sort"
-    [filter]="gridState.filter"
-    [sortable]="true"
-    [pageable]="true"
-    [resizable]="true"
-    [filterable]="true"
-    [height]="410"
-    (edit)="editHandler($event)"
-    (cancel)="cancelHandler()"
-    (save)="saveHandler($event)"
-    (add)="addHandler($event)"
-    (remove)="removeHandler($event)"
-    (dataStateChange)="onStateChange($event)"
->
-    <ng-template kendoGridToolbarTemplate>
-        <button kendoGridAddCommand>Add new</button>
-    </ng-template>
-
-    <kendo-grid-column field="Id" title="ID" [width]="40" filter="numeric"></kendo-grid-column>
-    <kendo-grid-column field="CustomerName" title="Name" [width]="40"></kendo-grid-column>
-    <kendo-grid-column field="CustomerAddress" title="Address" [width]="40"></kendo-grid-column>
-    <kendo-grid-column field="CustomerTypeName" title="CustomerType" [width]="40"></kendo-grid-column>
-    <kendo-grid-column title="Actions" width="120">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <button
-                class="me-2"
-                kendoButton
-                [look]="'default'"
-                iconClass="fa fa-remove fa-fw"
-                (click)="delete(dataItem)"
-            ></button>
-            <button
-                class="me-2"
-                kendoButton
-                [look]="'default'"
-                iconClass="fa fa-edit fa-fw"
-                routerLink="detail/{{ dataItem.Id }}"
-            ></button>
-            <button class="me-2" kendoGridEditCommand [primary]="true">Edit</button>
-            <button kendoGridRemoveCommand>Remove</button>
+<div class="grid-wrapper">
+    <kendo-grid
+        [data]="customergrid | async"
+        [pageSize]="gridState.take"
+        [skip]="gridState.skip"
+        [sort]="gridState.sort"
+        [filter]="gridState.filter"
+        [sortable]="true"
+        [pageable]="true"
+        [resizable]="true"
+        [filterable]="true"
+        [height]="410"
+        (edit)="editHandler($event)"
+        (cancel)="cancelHandler()"
+        (save)="saveHandler($event)"
+        (add)="addHandler($event)"
+        (remove)="removeHandler($event)"
+        (dataStateChange)="onStateChange($event)"
+    >
+        <ng-template kendoGridToolbarTemplate>
+            <button kendoGridAddCommand *ngxPermissionsOnly="'add'">Add new</button>
         </ng-template>
-    </kendo-grid-column>
-</kendo-grid>
+
+        <kendo-grid-column field="Id" title="ID" [width]="40" filter="numeric"></kendo-grid-column>
+        <kendo-grid-column field="CustomerName" title="Name" [width]="40"></kendo-grid-column>
+        <kendo-grid-column field="CustomerAddress" title="Address" [width]="40"></kendo-grid-column>
+        <kendo-grid-column field="CustomerTypeName" title="CustomerType" [width]="40"></kendo-grid-column>
+        <kendo-grid-column title="Actions" width="120">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <button
+                    class="me-2"
+                    kendoButton
+                    [look]="'default'"
+                    iconClass="fa fa-remove fa-fw"
+                    (click)="delete(dataItem)"
+                ></button>
+                <button
+                    class="me-2"
+                    kendoButton
+                    [look]="'default'"
+                    iconClass="fa fa-edit fa-fw"
+                    routerLink="detail/{{ dataItem.Id }}"
+                ></button>
+                <button class="me-2" kendoGridEditCommand [primary]="true" *ngxPermissionsOnly="'edit'">Edit</button>
+                <button kendoGridRemoveCommand *ngxPermissionsOnly="'delete'">Remove</button>
+            </ng-template>
+        </kendo-grid-column>
+    </kendo-grid>
+
+    <!-- ? Grid Loading -->
+    <div *ngIf="customergrid.gridLoading" class="k-i-loading"></div>
+</div>
 
 <app-customer-dialog [model]="customerDataItem" [isNew]="isNew" (save)="saveHandler($event)" (cancel)="cancelHandler()">
 </app-customer-dialog>
@@ -54,9 +58,11 @@
 <a class="btn btn-secondary mt-2" routerLink="/customers/add">Add New Customer</a>
 
 <kendo-dialog title="Please confirm" *ngIf="itemToRemove" (close)="confirmRemove(false)">
-    <p style="margin: 30px; text-align: center;">Are you sure you want to delete supplier {{ itemToRemove.CustomerName }}?</p>
+    <p style="margin: 30px; text-align: center">
+        Are you sure you want to delete supplier {{ itemToRemove.CustomerName }}?
+    </p>
     <kendo-dialog-actions>
-        <button class='k-button' (click)="confirmRemove(false)">No</button>
-        <button class='k-button k-primary' (click)="confirmRemove(true)" primary="true">Yes</button>
+        <button class="k-button" (click)="confirmRemove(false)">No</button>
+        <button class="k-button k-primary" (click)="confirmRemove(true)" primary="true">Yes</button>
     </kendo-dialog-actions>
-  </kendo-dialog>
+</kendo-dialog>

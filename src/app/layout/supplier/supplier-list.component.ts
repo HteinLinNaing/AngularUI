@@ -4,6 +4,7 @@ import { MessageService } from '../../core/services/message.service';
 import { Supplier } from '../../core/models/supplier';
 import { DataStateChangeEvent, GridDataResult } from '@progress/kendo-angular-grid';
 import { DataSourceRequestState } from '@progress/kendo-data-query';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-supplier-list',
@@ -11,7 +12,7 @@ import { DataSourceRequestState } from '@progress/kendo-data-query';
     styleUrls: ['./supplier-list.component.scss']
 })
 export class SupplierListComponent {
-    public suppliergrid: GridDataResult;
+    public suppliergrid: Observable<GridDataResult>;
     suppliers: Supplier[] = [];
     public supplierDataItem: Supplier;
     public isNew: boolean;
@@ -36,8 +37,8 @@ export class SupplierListComponent {
     }
 
     getSuppliers(): void {
-        this.supplierService.getSupplierGrid(this.gridState)
-            .subscribe(ressuppliers => this.suppliergrid = ressuppliers);
+        this.suppliergrid = this.supplierService;
+        this.supplierService.getSupplierGrid(this.gridState);
     }
 
     delete(supplier: Supplier): void {

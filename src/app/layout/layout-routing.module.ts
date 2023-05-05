@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './layout.component';
 import { TodoDetailComponent } from './todo/todo-detail.component';
 import { TodoComponent } from './todo/todo.component';
+import { PermissionGuardService } from '../shared/guard/permission-guard.service';
 
 const routes: Routes = [
     {
@@ -36,12 +37,35 @@ const routes: Routes = [
             },
             {
                 path: 'customers',
-                loadChildren: () => import('./customer/customer.module').then((m) => m.CustomerModule)
+                loadChildren: () => import('./customer/customer.module').then((m) => m.CustomerModule),
+                canActivate: [PermissionGuardService]
             },
             {
                 path: 'supplier',
-                loadChildren: () => import('./supplier/supplier.module').then((m) => m.SupplierModule)
+                loadChildren: () => import('./supplier/supplier.module').then((m) => m.SupplierModule),
+                canActivate: [PermissionGuardService]
             },
+            {
+                path: 'reports',
+                loadChildren: () => import('./report/report.module').then((m) => m.ReportModule),
+                canActivate: [PermissionGuardService]
+            },
+            {
+                path: 'admin',
+                loadChildren: () => import('./admin/admin.module').then((m) => m.AdminModule),
+                canActivate: [PermissionGuardService]
+            },
+            {
+                path: 'change-password',
+                loadChildren: () => import('./change-password/change-password.module').then((m) => m.ChangePasswordModule),
+                canActivate: [PermissionGuardService]
+            },
+            {
+                path: 'admin-level',
+                loadChildren: () => import('./admin-level/admin-level.module').then((m) => m.AdminLevelModule),
+                canActivate: [PermissionGuardService]
+            },
+
             { path: 'todos', component: TodoComponent },
             { path: 'todo-detail/:id', component: TodoDetailComponent },
         ]

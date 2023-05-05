@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SupplierType } from '../models/supplier-type';
+import { ApiService } from './api.service';
 import { MessageService } from './message.service';
 
 @Injectable({
@@ -9,18 +10,13 @@ import { MessageService } from './message.service';
 })
 export class SupplierTypeService {
 
-    private supplierTypeUrl = 'http://localhost:3600/api/SupplierType';  // URL to web api
-
-    httpOptions = {
-        headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-    };
-
     constructor(
         private http: HttpClient,
         private messageService: MessageService,
+        private apiService: ApiService,
     ) { }
 
     getSupplierTypes(): Observable<SupplierType[]> {
-        return this.http.get<SupplierType[]>(this.supplierTypeUrl);
+        return this.apiService.get('/suppliertype');
     }
 }

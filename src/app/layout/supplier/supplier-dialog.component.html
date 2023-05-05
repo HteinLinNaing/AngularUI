@@ -7,36 +7,105 @@
         <div>
             <label for="SupplierName">Supplier Name:</label>
             <input class="form-control" placeholder="supplier name" formControlName="SupplierName" />
-            <div *ngIf="supplierformGroup.get('SupplierName').invalid && supplierformGroup.get('SupplierName').errors.required"
-                class="text-danger mt-2 ms-1">
+            <div
+                *ngIf="
+                    supplierformGroup.get('SupplierName').invalid &&
+                    supplierformGroup.get('SupplierName').errors.required
+                "
+                class="text-danger mt-2 ms-1"
+            >
                 <small>Supplier Name is required.</small>
             </div>
-            <div *ngIf="supplierformGroup.get('SupplierName').invalid && supplierformGroup.get('SupplierName').errors.maxlength"
-                class="text-danger mt-2 ms-1">
+            <div
+                *ngIf="
+                    supplierformGroup.get('SupplierName').invalid &&
+                    supplierformGroup.get('SupplierName').errors.maxlength
+                "
+                class="text-danger mt-2 ms-1"
+            >
                 <small>Supplier Name must be maximum 20 characters long.</small>
             </div>
-            <div *ngIf="supplierformGroup.get('SupplierName').invalid && supplierformGroup.get('SupplierName').errors.minlength"
-                class="text-danger mt-2 ms-1">
+            <div
+                *ngIf="
+                    supplierformGroup.get('SupplierName').invalid &&
+                    supplierformGroup.get('SupplierName').errors.minlength
+                "
+                class="text-danger mt-2 ms-1"
+            >
                 <small>Supplier Name must be minimum 5 characters long.</small>
             </div>
             <br />
             <label for="RegisterDate">Register Date:</label>
-            <kendo-datepicker class="form-control mb-3" formControlName="RegisterDate"
-                format="dd/MM/yyyy"></kendo-datepicker>
+            <kendo-datepicker
+                class="form-control mb-3"
+                formControlName="RegisterDate"
+                format="dd/MM/yyyy"
+            ></kendo-datepicker>
             <br />
             <label for="SupplierAddress">Address:</label>
             <input class="form-control" placeholder="address" formControlName="SupplierAddress" />
             <br />
             <label for="SupplierType">Supplier Type: </label>
-            <kendo-dropdownlist class="form-control" formControlName="SupplierTypeId" [data]="suppliertypes"
-                [textField]="'SupplierTypeName'" [valueField]="'SupplierTypeId'" [valuePrimitive]="true">
+            <kendo-dropdownlist
+                class="form-control mb-3"
+                formControlName="SupplierTypeId"
+                [data]="suppliertypes"
+                [textField]="'SupplierTypeName'"
+                [valueField]="'SupplierTypeId'"
+                [valuePrimitive]="true"
+            >
             </kendo-dropdownlist>
+            <label for="SupplierPhoto">Supplier Photo: </label>
+            <div class="col-md-12">
+                <div *ngIf="previewImage">
+                    <div *ngFor="let image of previewImage | keyvalue">
+                        <img
+                            [src]="image.value"
+                            [alt]="image.key"
+                            width="200px"
+                            data-max-size="10kb"
+                            class="img-fluid rounded me-3 mb-2"
+                        />
+                        <button
+                            kendoButton
+                            (click)="deleteImageHandler($event, image)"
+                            iconClass="fa fa-remove fa-fw"
+                        ></button>
+                    </div>
+                </div>
+                <div class="form-group row mt-3">
+                    <div class="col-auto">
+                        <kendo-upload
+                            class="selector"
+                            name="image"
+                            formControlName="SupplierPhoto"
+                            (success)="successEventHandler($event)"
+                            (remove)="removeEventHandler($event)"
+                            (upload)="uploadEventHandler($event)"
+                            [multiple]="true"
+                            [concurrent]="false"
+                            [saveUrl]="uploadSaveUrl"
+                            [removeUrl]="uploadRemoveUrl"
+                        >
+                        </kendo-upload>
+                    </div>
+                </div>
+            </div>
         </div>
-
     </form>
 
     <kendo-dialog-actions>
         <button class="k-button" (click)="onCancel($event)">Cancel</button>
         <button class="k-button k-primary" [disabled]="!supplierformGroup.valid" (click)="onSave($event)">Save</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+
+<kendo-dialog title="Please confirm" *ngIf="photoToRemove" (close)="confirmPhotoRemove(false)">
+    <p style="margin: 30px; text-align: center">
+        Are you sure you want to delete customer photo {{ photoToRemove.key }}?
+    </p>
+    <kendo-dialog-actions>
+        <button class="k-button" (click)="confirmPhotoRemove(false)">No</button>
+        <button class="k-button k-primary" (click)="confirmPhotoRemove(true)" primary="true">Yes</button>
     </kendo-dialog-actions>
 </kendo-dialog>

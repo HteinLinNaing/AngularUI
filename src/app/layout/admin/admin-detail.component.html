@@ -1,0 +1,92 @@
+<div *ngIf="adminEdit.value">
+    <h2>{{ adminEdit.value.AdminName | uppercase }} Details</h2>
+    <div><span>Admin ID : </span>{{ adminEdit.value.Id }}</div>
+    <br />
+    <form [formGroup]="adminEdit" (ngSubmit)="saveAdmin()" #formDir="ngForm">
+        <div>
+            <input type="hidden" formControlName="Id" />
+            <label for="AdminName">Name:</label>
+            <input class="form-control" placeholder="Admin Name" formControlName="AdminName" />
+            <div
+                *ngIf="adminEdit.get('AdminName').invalid && adminEdit.get('AdminName').errors.required"
+                class="text-danger mt-2 ms-1"
+            >
+                <small>Admin Name is required.</small>
+            </div>
+            <div
+                *ngIf="adminEdit.get('AdminName').invalid && adminEdit.get('AdminName').errors.maxlength"
+                class="text-danger mt-2 ms-1"
+            >
+                <small>Admin Name must be maximum 20 characters long.</small>
+            </div>
+            <div
+                *ngIf="adminEdit.get('AdminName').invalid && adminEdit.get('AdminName').errors.minlength"
+                class="text-danger mt-2 ms-1"
+            >
+                <small>Admin Name must be minimum 5 characters long.</small>
+            </div>
+            <br />
+
+            <label for="Email">Email:</label>
+            <input class="form-control" placeholder="Email" formControlName="Email" />
+            <br />
+
+            <label for="LoginName">Login Name:</label>
+            <input class="form-control" placeholder="Login Name" formControlName="LoginName" />
+            <br />
+
+            <label for="Admin Level">Admin Level:</label>
+            <kendo-dropdownlist
+                class="form-control mb-3"
+                formControlName="AdminLevelId"
+                [data]="adminlevel"
+                [textField]="'AdminLevelName'"
+                [valueField]="'AdminLevelId'"
+                [valuePrimitive]="true"
+                [(value)]="selectedAdminlevel"
+            >
+            </kendo-dropdownlist>
+
+            <label for="AdminPhoto">Admin Photo: </label>
+            <div class="col-md-12">
+                <div *ngIf="previewImage">
+                    <img
+                        [src]="previewImage"
+                        alt="image preview"
+                        width="200px"
+                        data-max-size="10kb"
+                        class="img-fluid rounded me-3"
+                    />
+                    <button kendoButton (click)="deleteImageHandler($event)" iconClass="fa fa-remove fa-fw"></button>
+                </div>
+                <div class="form-group row mt-3">
+                    <div class="col-auto">
+                        <kendo-upload
+                            class="selector"
+                            name="image"
+                            formControlName="AdminPhoto"
+                            (success)="successEventHandler($event)"
+                            (remove)="removeEventHandler($event)"
+                            (upload)="uploadEventHandler($event)"
+                            [multiple]="false"
+                            [saveUrl]="uploadSaveUrl"
+                            [removeUrl]="uploadRemoveUrl"
+                        >
+                        </kendo-upload>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <button (click)="goBack($event)" class="btn btn-secondary me-3">Go Back</button>
+        <button type="submit" class="btn btn-secondary">Submit</button>
+    </form>
+</div>
+
+<kendo-dialog title="Please confirm" *ngIf="photoToRemove" (close)="confirmPhotoRemove(false)">
+    <p style="margin: 30px; text-align: center">Are you sure you want to delete admin photo?</p>
+    <kendo-dialog-actions>
+        <button class="k-button" (click)="confirmPhotoRemove(false)">No</button>
+        <button class="k-button k-primary" (click)="confirmPhotoRemove(true)" primary="true">Yes</button>
+    </kendo-dialog-actions>
+</kendo-dialog>

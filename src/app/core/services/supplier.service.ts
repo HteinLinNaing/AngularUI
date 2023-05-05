@@ -1,8 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { DataSourceRequestState } from '@progress/kendo-data-query';
-import { catchError, Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Supplier } from '../models/supplier';
 import { ApiService } from './api.service';
 import { MessageService } from './message.service';
@@ -10,83 +9,61 @@ import { MessageService } from './message.service';
 @Injectable({
     providedIn: 'root'
 })
-export class SupplierService {
-
-    private supplierUrl = 'http://localhost:3600/api/Supplier';  // URL to web api
-
-    httpOptions = {
-        headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-    };
+export class SupplierService extends BehaviorSubject<GridDataResult> {
+    public gridLoading: boolean;
 
     constructor(
-        private http: HttpClient,
         private messageService: MessageService,
         private apiservice: ApiService,
-    ) { }
+    ) {
+        super(null);
+    }
 
     getSuppliers(): Observable<Supplier[]> {
-        return this.http.get<Supplier[]>(this.supplierUrl)
-            .pipe(
-                tap(_ => this.log('fetched suppliers')),
-                catchError(this.handleError<Supplier[]>('getSuppliers', []))
-            );
+        this.messageService.add('SupplierService: fetched suppliers');
+        return this.apiservice.get("/supplier");
     }
 
     getSupplier(id: number): Observable<Supplier> {
-        const url = `${this.supplierUrl}/${id}`;
-        return this.http.get<Supplier>(url)
-            .pipe(
-                tap(_ => this.log(`fetched supplier id=${id}`)),
-                catchError(this.handleError<Supplier>(`get supplier id=${id}`))
-            );
+        this.messageService.add(`SupplierService: fetched Supplier id=${id}`);
+        return this.apiservice.get(`/supplier/getsupplier/${id}`);
     }
 
-    getSupplierGrid(girdState: DataSourceRequestState): Observable<GridDataResult> {
-        return this.apiservice.fetchgridpostJson('/supplier/showlist/', girdState);
+    getSupplierGrid(girdState: DataSourceRequestState) {
+        this.gridLoading = true;
+        return this.apiservice.fetchgridpostJson('/supplier/showlist', girdState)
+            .subscribe(x => {
+                super.next(x);
+                this.gridLoading = false;
+            });
     }
 
     // ? PUT: update the supplier on the server
-    updateSupplier(supplier: Supplier): Observable<any> {
-        const url = `${this.supplierUrl}/${supplier.Id}`;
-        return this.http.put(url, supplier, this.httpOptions).pipe(
-            tap(_ => this.log(`updated supplier id = ${supplier.Id}`)),
-            catchError(this.handleError<any>('updateSupplier'))
-        );
+    updateSupplier(Supplier: Supplier): Observable<any> {
+        this.messageService.add(`SupplierService: update Supplier =${Supplier.SupplierName}`);
+        return this.apiservice.putJson('/supplier/updatesupplier/' + Supplier.Id, Supplier);
     }
 
     /** POST: add a new supplier to the server */
-    addSupplier(supplier: Supplier): Observable<Supplier> {
-        return this.http.post<Supplier>(this.supplierUrl, supplier, this.httpOptions).pipe(
-            tap((newSupplier: Supplier) => this.log(`added supplier w/ id=${newSupplier.Id}`)),
-            catchError(this.handleError<Supplier>('addSupplier'))
-        );
+    addSupplier(Supplier: Supplier): Observable<Supplier> {
+        this.messageService.add(`SupplierService: add Supplier =${Supplier.SupplierName}`);
+        return this.apiservice.postJson('/supplier/addsupplier', Supplier);
     }
 
     /** DELETE: delete the supplier from the server */
     deleteSupplier(id: number): Observable<Supplier> {
-        const url = `${this.supplierUrl}/${id}`;
-
-        return this.http.delete<Supplier>(url, this.httpOptions).pipe(
-            tap(_ => this.log(`deleted supplier id=${id}`)),
-            catchError(this.handleError<Supplier>('deleteSupplier'))
-        );
+        this.messageService.add(`SupplierService: delete Supplier id=${id}`);
+        return this.apiservice.delete('/supplier/deletesupplier/' + id);
     }
 
-    // TODO: For Message Services
-    private handleError<T>(operation = 'operation', result?: T) {
-        return (error: any): Observable<T> => {
-            // TODO: send the error to remote logging infrastructure
-            console.error(error); // log to console instead
-
-            // TODO: better job of transforming error for user consumption
-            this.log(`${operation} failed: ${error.message}`);
-
-            // Let the app keep running by returning an empty result.
-            return of(result as T);
-        };
+    getImagePath(id: number): Observable<string> {
+        const encryptdata = btoa(id.toString());  //convert to base64
+        return this.apiservice.get('/fileservice/DownloadDir/SupplierPhoto/' + encryptdata);
     }
-    /** Log a HeroService message with the MessageService */
-    private log(message: string) {
-        this.messageService.add(`SupplierService: ${message}`);
+
+    deleteSupplierPhoto(id: number, filename: string): Observable<string> {
+        const encryptdata = btoa(id.toString());  //convert to base64
+        this.messageService.add(`SupplierService: delete Supplier Photo =${id} ${filename}`);
+        return this.apiservice.postJson('/fileservice/RemoveDir/SupplierPhoto/' + encryptdata, filename);
     }
 }

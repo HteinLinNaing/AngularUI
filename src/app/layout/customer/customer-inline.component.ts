@@ -16,7 +16,8 @@ import { CustomerService } from '../../core/services/customer.service';
     styleUrls: ['./customer-inline.component.scss']
 })
 export class CustomerInlineComponent {
-    public customergrid: GridDataResult;
+    // public customergrid: GridDataResult;
+    public customergrid: Observable<GridDataResult>;
     public itemToRemove: any;
     public customerDataItem: Customer;
     public isNew: boolean;
@@ -50,10 +51,10 @@ export class CustomerInlineComponent {
     }
 
     getCustomers(): void {
-        this.customerService.getCustomerGrid(this.gridState)
-            .subscribe(rescustomers => this.customergrid = rescustomers);
-        // this.customergrid = this.customerService;
-        // this.customerService.getCustomerGrid(this.gridState);
+        // this.customerService.getCustomerGrid(this.gridState)
+        //     .subscribe(rescustomers => this.customergrid = rescustomers);
+        this.customergrid = this.customerService;
+        this.customerService.getCustomerGrid(this.gridState);
     }
 
     private closeEditor(grid, rowIndex = this.editedRowIndex) {
@@ -130,6 +131,13 @@ export class CustomerInlineComponent {
     onStateChange(dstate: DataStateChangeEvent): void {
         //console.log(dstate);
         this.gridState = dstate;
+        localStorage.setItem('MyCustomerInlineState', JSON.stringify(this.gridState));
+        this.getCustomers();
+    }
+
+    public clearfilter(): void {
+        this.gridState.skip = 0;
+        this.gridState.filter = { logic: 'and', filters: [] };
         localStorage.setItem('MyCustomerInlineState', JSON.stringify(this.gridState));
         this.getCustomers();
     }
